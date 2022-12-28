@@ -1,5 +1,7 @@
 const asyncHandler = require('express-async-handler')
 
+const Board = require('../models/boardModel')
+
 
 
 
@@ -7,32 +9,59 @@ const asyncHandler = require('express-async-handler')
 // Route : GET /api/boards
 // access : Private 
 const getBoards = asyncHandler(async(req, res) => {
-    res.status(200).json({message : 'Get Boards'})
+    const boards = await Board.find()
+    res.status(200).json(boards)
 })
 
 // Desc : set board
 // Route : POST /api/boards
 // access : Private 
 const setBoard = asyncHandler(async(req, res) => {
-    if(!req.body.text){
+    if(!req.body.title){ // error if there is no title
        res.status(400)
-       throw new Error('Please add a text field')
+       throw new Error('Please add a title')
     }
-    res.status(200).json({message : 'Set board'})
+    const board = await Board.create({
+        title: req.body.title
+    })
+
+    res.status(200).json(board)
 })
 
 // Desc : update board
 // Route : PUT /api/boards:id
 // access Private 
 const updateBoard = asyncHandler(async(req, res) => {
-    res.status(200).json({message : `Update board ${req.params.id}`})
+    const board = await Board.findById(req.params.id)
+
+    if(!board) { // if there is no board with this id : throw error
+        res.status(400)
+        throw new Error('Board not found')
+    }
+    const updatedBoard = await Board.findByIdAndUpdate(req.params.id, req.body, {
+        new: true,
+    })
+
+    res.status(200).json(updateBoard)
 })
 
 // Desc : delete board
 // Route : DELETE /api/boards:id
 // access Private 
 const deleteBoard = asyncHandler(async(req, res) => {
-    res.status(200).json({message : `Delete board ${req.params.id}`})
+    
+    const board = await Board.findById(req.params.id)
+    
+    if(!board){
+        res.status(400)
+        throw new Error('Board not found')
+    }
+    /*
+    const deletedBoard = await Board.findByIdAndDelete(req.params.id)
+
+    res.status(200).json(deletedBoard)*/
+    await board.remove()
+    res.status(200).json({id : req.params.id})
 })
 
 module.exports = {
