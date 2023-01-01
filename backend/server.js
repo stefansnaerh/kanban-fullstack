@@ -18,6 +18,7 @@ app.use(express.urlencoded({ extended : false}))
 
 app.use('/api/boards', require('./routes/boardRoutes'))
 
+
 app.use(errorHandler)
 
 app.listen(port, () => console.log(`Server started on port ${port}`))
