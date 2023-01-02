@@ -3,20 +3,17 @@ const asyncHandler = require('express-async-handler')
 const Board = require('../models/boardModel')
 const Task = require('../models/taskModel')
 const SubTask = require('../models/subTaskModel')
-const { findById } = require('../models/subTaskModel')
-const { isObjectIdOrHexString } = require('mongoose')
 
-// Desc : set task
-// Route : set /api/boards/:boardsId/tasks
+
+// Desc : set subTask
+// Route : set /api/boards/:boardsId/tasks/:taskId
 // access : private
-
 const setSubTask = asyncHandler(async(req, res) => {
 
     const boardId = req.params.boardId
     const thisBoard = Board.findById(boardId)
     const taskId = req.params.taskId
 
-    
     Board.findOne({_id : req.params.boardId}, function(err, result){
         const newSubtask = new SubTask({
             name : req.body.name,
@@ -25,40 +22,11 @@ const setSubTask = asyncHandler(async(req, res) => {
         const getTask = result
         const getSubTasks = getTask.tasks.filter(task => task._id == taskId)
         getSubTasks[0].subtasks.push(newSubtask)
-        console.log(getSubTasks[0].subtasks)
         getTask.save(function(err, advResult){
-            console.log("success")
-            console.log(advResult)
-            res.json(advResult)
+            res.status(200).json(advResult)
         });
     });
     })
-    
-
-    
-
-const setTask = asyncHandler(async(req, res) => {
-    
-    if(!req.body.name){
-        res.status(400)
-        throw new Error('please add task name')
-    }
-    Board.findOne({_id: req.params.boardId}, function(err, result){
-        const task =  new Task({
-            name : req.body.name,
-            description: req.body.description
-        })
-        const destination = result
-        console.log(destination.tasks)
-        destination.tasks.push(task)
-        console.log(destination)
-        destination.save(function(err, advResult){
-            console.log("success")
-            res.json(advResult)
-        })
-    })
-  
-})
 
 
 // Desc : get goals
@@ -77,12 +45,9 @@ const setBoard = asyncHandler(async(req, res) => {
        res.status(400)
        throw new Error('Please add a title')
     }
-    // need to figure this out - this is supposed to be in setTask function
-  
     const board = await Board.create({
         title: req.body.title
     })
-
     res.status(200).json(board)
 })
 
@@ -99,7 +64,6 @@ const updateBoard = asyncHandler(async(req, res) => {
     const updatedBoard = await Board.findByIdAndUpdate(req.params.id, req.body, {
         new: true,
     })
-
     res.status(200).json(updateBoard)
 })
 
@@ -114,10 +78,6 @@ const deleteBoard = asyncHandler(async(req, res) => {
         res.status(400)
         throw new Error('Board not found')
     }
-    /*
-    const deletedBoard = await Board.findByIdAndDelete(req.params.id)
-
-    res.status(200).json(deletedBoard)*/
     await board.remove()
     res.status(200).json({id : req.params.id})
 })
@@ -127,6 +87,7 @@ module.exports = {
     setBoard,
     updateBoard,
     deleteBoard,
-    setTask,
-    setSubTask
+
+    setSubTask,
+   
 }
