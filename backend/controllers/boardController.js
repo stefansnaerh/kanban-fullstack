@@ -1,39 +1,15 @@
 const asyncHandler = require('express-async-handler')
 
 const Board = require('../models/boardModel')
-const Task = require('../models/taskModel')
-const SubTask = require('../models/subTaskModel')
+const User = require('../models/userModel')
 
-
-// Desc : set subTask
-// Route : set /api/boards/:boardsId/tasks/:taskId
-// access : private
-const setSubTask = asyncHandler(async(req, res) => {
-
-    const boardId = req.params.boardId
-    const thisBoard = Board.findById(boardId)
-    const taskId = req.params.taskId
-
-    Board.findOne({_id : req.params.boardId}, function(err, result){
-        const newSubtask = new SubTask({
-            name : req.body.name,
-            done : false
-        })
-        const getTask = result
-        const getSubTasks = getTask.tasks.filter(task => task._id == taskId)
-        getSubTasks[0].subtasks.push(newSubtask)
-        getTask.save(function(err, advResult){
-            res.status(200).json(advResult)
-        });
-    });
-    })
 
 
 // Desc : get goals
 // Route : GET /api/boards
 // access : Private 
 const getBoards = asyncHandler(async(req, res) => {
-    const boards = await Board.find()
+    const boards = await Board.find({ user: req.user.id})
     res.status(200).json(boards)
 })
 
@@ -46,7 +22,8 @@ const setBoard = asyncHandler(async(req, res) => {
        throw new Error('Please add a title')
     }
     const board = await Board.create({
-        title: req.body.title
+        title: req.body.title,
+        user: req.user.id
     })
     res.status(200).json(board)
 })
@@ -60,6 +37,18 @@ const updateBoard = asyncHandler(async(req, res) => {
     if(!board) { // if there is no board with this id : throw error
         res.status(400)
         throw new Error('Board not found')
+    }
+
+    const user = await User.findById(req.user.id)
+    // Check for user
+    if(!user) {
+        res.status(401)
+        throw new Error('User not found')
+    }
+    // Make sure the logged in user matches board user
+    if(board.user.toString() !== user.id) {
+        res.status(401)
+        throw new Error('User not authorized')
     }
     const updatedBoard = await Board.findByIdAndUpdate(req.params.id, req.body, {
         new: true,
@@ -78,6 +67,17 @@ const deleteBoard = asyncHandler(async(req, res) => {
         res.status(400)
         throw new Error('Board not found')
     }
+    const user = await User.findById(req.user.id)
+    // Check for user
+    if(!user) {
+        res.status(401)
+        throw new Error('User not found')
+    }
+    // Make sure the logged in user matches board user
+    if(board.user.toString() !== user.id) {
+        res.status(401)
+        throw new Error('User not authorized')
+    }
     await board.remove()
     res.status(200).json({id : req.params.id})
 })
@@ -86,8 +86,5 @@ module.exports = {
     getBoards,
     setBoard,
     updateBoard,
-    deleteBoard,
-
-    setSubTask,
-   
+    deleteBoard,  
 }
