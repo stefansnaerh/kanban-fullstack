@@ -1,0 +1,16 @@
+@import '/src/variables.scss';
+
+
+
+
+main {
+    padding-top: 2rem;
+    padding-left: 1.5rem;
+    display: flex;
+    gap: 20px;
+    overflow: auto;
+    height: 100vh;
+    .column-container {
+
+    }
+}
