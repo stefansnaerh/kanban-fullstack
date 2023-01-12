@@ -14,12 +14,13 @@ const apiBoard = {
     },
 
     post: (path, body) => {
+        console.log(body)
         fetch(`${url}${path}`, {
             method: 'POST',
             headers: {
-                'Content-Type': "applicsation/json",
+                'Content-Type': "application/json",
             },
-            body: body ? JSON.stringify(body) : '',
+            body: body ? JSON.stringify(body) : '{message: "no body"}',
         }).then(async (res) => {
             return {
                 data: await res.json(),

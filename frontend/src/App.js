@@ -28,7 +28,6 @@ function App() {
           setLoading(false) 
       }
       getBoards()
-      console.log(boardData[0])
   }, [])
   
 

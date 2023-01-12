@@ -4,12 +4,9 @@ import './navbar.scss'
 // icons
 import plusSign from '../../images/+.svg'
 import threeDots from '../../images/threeDots.svg'
-import dropdownArrow from '../../images/dropdownArrow.svg'
-import boardIcon from '../../images/boardIcon.svg'
-import boardIconPurple from '../../images/boardIconPurple.svg'
-import boardIconWhite from '../../images/boardIconWhite.svg'
-
+// components
 import Navlinks from '../navlinks/navlinks'
+import AddBoardModal from '../addBoardModal/addBoardModal'
 
 import { useState } from 'react'
 
@@ -17,14 +14,12 @@ import { useState } from 'react'
 
 const Navbar = ({boardData}) => {
     const [displayEditAndDelete, setDisplayEditAndDelete] = useState("edit-delete-board-container-none")
-    
 
     const displayEditAndDeleteModal = () => {
         displayEditAndDelete === "edit-delete-board-container-none" ? 
         setDisplayEditAndDelete('edit-delete-board-container'):
         setDisplayEditAndDelete('edit-delete-board-container-none')
     }
-
 
     return (
         <header>
@@ -36,8 +31,8 @@ const Navbar = ({boardData}) => {
            <Navlinks
            boardData={boardData}
            />
-            <div className='add-column-see-more-container'>
-                <button className='add-column-button'>
+            <div className='add-task-see-more-container'>
+                <button className='add-task-button'>
                     <img alt='plus sign' src={plusSign}></img>
                 </button>
                 <button className='three-dots-button' onClick={displayEditAndDeleteModal}>
