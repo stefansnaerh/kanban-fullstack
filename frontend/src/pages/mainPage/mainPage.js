@@ -8,6 +8,7 @@ import { BackgroundGrayContext } from '../../App';
 import { useContext, useState } from 'react';
 
 const MainPage = ( {currentBoard, boardData} ) => {
+    console.log(currentBoard)
     // changing column object to array
     const {taskContext, setTaskContext} = useContext(BackgroundGrayContext)
     const [displayViewTask, setDisplayViewTask] = useState(false)

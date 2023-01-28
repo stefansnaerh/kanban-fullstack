@@ -6,7 +6,7 @@ const url='http://localhost:5001/api/boards'
 
 const apiBoard = {
 
-    get : (path) => {
+    get: (path) => {
         return fetch(`${url}${path}`, {
             method: 'GET',
             headers: {},

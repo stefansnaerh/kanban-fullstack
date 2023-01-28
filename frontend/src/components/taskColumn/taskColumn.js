@@ -32,6 +32,7 @@ const TaskColumn = ( {currentBoard, taskStatus, setDisplayViewTask} ) => {
         />
         <div ref={testing} className='tasks-column-container'>
         {currentBoard.tasks.map(task => {
+            console.log(task)
           return (
             <>
             {taskStatus === task.status ? (

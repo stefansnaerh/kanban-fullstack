@@ -57,7 +57,7 @@ const AddTaskModal = ({closeAddTaskModal, boardData}) => {
         newColumnCount.splice(index, 1)
         setColumnCount(newColumnCount)
     }
-  
+    console.log(getStatus)
     const addNewTask = (e) => {
         e.preventDefault()
         const newBoard = {
