@@ -1,20 +1,11 @@
 
 
-
 const url='http://localhost:5001/api/boards'
 
 
-const apiBoard = {
+const apiTask = {
 
-    get : (path) => {
-        return fetch(`${url}${path}`, {
-            method: 'GET',
-            headers: {},
-        }).then(async (res) => ({ data: await res.json(), status: res.status}))
-    },
-
-    post: (path, body) => {
-        console.log(body)
+    post: (path,  body) => {
         fetch(`${url}${path}`, {
             method: 'POST',
             headers: {
@@ -36,7 +27,7 @@ const apiBoard = {
             },
             body: body ? JSON.stringify(body) : '{message: "no body"}',
         }).then(async (res) => ({ data: await res.json(), status : res.status}))
-    }, 
+    },
     delete: (path, body) => {
         fetch(`${url}${path}`, {
             method : 'DELETE',
@@ -50,4 +41,4 @@ const apiBoard = {
 
 
 
-export default apiBoard
+export default apiTask

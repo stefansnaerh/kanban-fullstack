@@ -8,8 +8,10 @@ nav {
         font-size: $navFont;
     } 
     button {
+        height: 25px;
         border: none;
         background: none;
+        align-self: center;
     }
     .links-container-none {
         display: none;

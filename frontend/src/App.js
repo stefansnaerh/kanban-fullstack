@@ -12,14 +12,14 @@ export const BackgroundGrayContext = createContext()
 
 
 
+
 function App() {
   const [loading, setLoading] = useState(true)
   const [boardData, setBoardData] = useState({})
   // setting class for App to state to be able to change to gray background onClick from other components
   const [greyBackground, setGrayBackground] = useState('App')
-
-
-  
+  const [boardIndex, setBoardIndex] = useState(0)
+  const [taskContext, setTaskContext] = useState([])
 
   useEffect(() => {
       const getBoards = async()=>{
@@ -28,23 +28,32 @@ function App() {
           setLoading(false) 
       }
       getBoards()
-  }, [])
   
+  }, [])
+
 
   return (
     <div className={greyBackground}>
+
       {loading ? (<>Loading.....</>): 
       (
-      <BackgroundGrayContext.Provider value={{greyBackground, setGrayBackground}}>
+      <BackgroundGrayContext.Provider 
+      value={{
+        greyBackground, setGrayBackground,
+        boardIndex , setBoardIndex,
+        taskContext, setTaskContext
+        }}>
         <Navbar
         boardData={boardData}
+        boardIndex= {boardIndex}
         />
         <MainPage
-        boardData={boardData[0]}
+        currentBoard={boardData[boardIndex]}
+        boardData={boardData}
         />
       </BackgroundGrayContext.Provider>
       )}
-    </div>
+      </div>
   );
 }
 

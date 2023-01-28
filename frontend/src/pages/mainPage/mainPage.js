@@ -1,27 +1,45 @@
 import './mainPage.scss'
 
 import TaskColumn from "../../components/taskColumn/taskColumn";
+import ViewTaskModal from '../../components/viewTaskModal/viewTask';
 
 
-const MainPage = ( {boardData} ) => {
-    // Need to map over this eventually when i delete the dummy data
-    const columnsObjectToArray = Object.keys(boardData.columns)
+import { BackgroundGrayContext } from '../../App';
+import { useContext, useState } from 'react';
 
+const MainPage = ( {currentBoard, boardData} ) => {
+    // changing column object to array
+    const {taskContext, setTaskContext} = useContext(BackgroundGrayContext)
+    const [displayViewTask, setDisplayViewTask] = useState(false)
+    const columnsObjectToArray = Object.values(currentBoard.columns[0])
+    
 return (
     <main>
-    {boardData.columns.map(column => {
-        console.log(column)
+    {columnsObjectToArray.map(column => {
         return (
             <div  className="column-container">
             <TaskColumn
-            boardData={boardData}
+            currentBoard={currentBoard}
             taskStatus={column}
+            setDisplayViewTask={setDisplayViewTask}
             />
             </div>
         )
     })}
+    {displayViewTask ? (
+    <ViewTaskModal
+    taskContext={taskContext}
+    columns={columnsObjectToArray}
+    setDisplayViewTask={setDisplayViewTask}
+    displayViewTask={displayViewTask}
+    currentBoard={currentBoard}
+    /> 
+    ) : null}
+
+   { /*
+   <AddTaskModal
+boardData={boardData}/> */}
     </main>
-   
 )
 }
 
