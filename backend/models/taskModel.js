@@ -8,7 +8,8 @@ const SubTaskSchema = require('./subTaskModel').schema
 const TaskSchema = new Schema({
     name : String,
     description : String,
-    subtasks: [SubTaskSchema]
+    status: String,
+    subtasks: []
     
 })
 

@@ -1,4 +1,5 @@
 const express = require('express')
+const cors = require('cors')
 const colors = require('colors')
 const dotenv = require('dotenv') // for environment variables
 dotenv.config({path:__dirname+'/.env'});
@@ -9,9 +10,10 @@ const mongoUri = process.env.MONGO_URI
 
 connectDB()
 
+
 const app = express() // initialize express
 
-
+app.use(cors())
 // to be able to read body data
 app.use(express.json())
 app.use(express.urlencoded({ extended : false}))

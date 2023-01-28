@@ -8,8 +8,8 @@ const { protect } = require('../middleware/authMiddleware')
 
 
 // routes for boards
-router.route('/').get(protect, getBoards).post(protect, setBoard)
-router.route('/:id').delete(protect, deleteBoard).put(protect, updateBoard)
+router.route('/').get(getBoards).post(setBoard)
+router.route('/:id').delete( deleteBoard).put(updateBoard)
 
 // routes for tasks
 router.post('/:boardId', setTask)

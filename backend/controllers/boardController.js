@@ -1,7 +1,7 @@
 const asyncHandler = require('express-async-handler')
 
 const Board = require('../models/boardModel')
-const User = require('../models/userModel')
+
 
 
 
@@ -9,7 +9,7 @@ const User = require('../models/userModel')
 // Route : GET /api/boards
 // access : Private 
 const getBoards = asyncHandler(async(req, res) => {
-    const boards = await Board.find({ user: req.user.id})
+    const boards = await Board.find()
     res.status(200).json(boards)
 })
 
@@ -23,7 +23,7 @@ const setBoard = asyncHandler(async(req, res) => {
     }
     const board = await Board.create({
         title: req.body.title,
-        user: req.user.id
+        columns: req.body.columns
     })
     res.status(200).json(board)
 })
@@ -39,17 +39,6 @@ const updateBoard = asyncHandler(async(req, res) => {
         throw new Error('Board not found')
     }
 
-    const user = await User.findById(req.user.id)
-    // Check for user
-    if(!user) {
-        res.status(401)
-        throw new Error('User not found')
-    }
-    // Make sure the logged in user matches board user
-    if(board.user.toString() !== user.id) {
-        res.status(401)
-        throw new Error('User not authorized')
-    }
     const updatedBoard = await Board.findByIdAndUpdate(req.params.id, req.body, {
         new: true,
     })
@@ -67,17 +56,7 @@ const deleteBoard = asyncHandler(async(req, res) => {
         res.status(400)
         throw new Error('Board not found')
     }
-    const user = await User.findById(req.user.id)
-    // Check for user
-    if(!user) {
-        res.status(401)
-        throw new Error('User not found')
-    }
-    // Make sure the logged in user matches board user
-    if(board.user.toString() !== user.id) {
-        res.status(401)
-        throw new Error('User not authorized')
-    }
+    
     await board.remove()
     res.status(200).json({id : req.params.id})
 })
