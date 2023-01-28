@@ -13,7 +13,7 @@ header {
         font-size: 3.2rem;
     }
     h2 {
-        font-size: $headerFontSize;
+        font-size: $navFont;
         font-weight: $FW600;
     }
     .logo-container{
@@ -86,6 +86,7 @@ header {
 
 @media screen and (min-width: 768px ){
     header {
+        
         .sidebar-line {
             height: 7rem;
             width: 1px;
