@@ -16,8 +16,6 @@ const setTask = asyncHandler(async(req, res) => {
         res.status(400)
         throw new Error('please add task name')
     }
-    console.log(req.body)
-    console.log(req.params.boardId)
     Board.findOne({_id: req.params.boardId}, function(err, result){
         const task =  new Task({
             name : req.body.name,
